@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P1", "P1\P1.csproj", "{20A3C081-2804-433D-9753-FA6FE06072F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimingP1", "TimingP1\TimingP1.csproj", "{BBD3B201-E2AA-4A2B-8332-30DF54BE1320}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20A3C081-2804-433D-9753-FA6FE06072F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20A3C081-2804-433D-9753-FA6FE06072F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20A3C081-2804-433D-9753-FA6FE06072F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20A3C081-2804-433D-9753-FA6FE06072F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBD3B201-E2AA-4A2B-8332-30DF54BE1320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBD3B201-E2AA-4A2B-8332-30DF54BE1320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBD3B201-E2AA-4A2B-8332-30DF54BE1320}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBD3B201-E2AA-4A2B-8332-30DF54BE1320}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
