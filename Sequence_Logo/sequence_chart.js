@@ -9,6 +9,8 @@ const char_U = "U";       // Uracil
 const char_Y = "Y";       // Pyrimidine
 const char_space = "-";   // Space
 const char_other = "*";   // Any other character
+const charLookup = ["A", "C", "G", "R", "T", "U", "Y", "-", "*"];
+const colorLookup = ["green", "blue", "red", "purple", "orange", "cyan", "gold", "black", "black"];
 
 $(document).ready(function(){
   $('#fileInput').change(generateGraphic);
@@ -16,7 +18,8 @@ $(document).ready(function(){
 
 /* Generates and displays a sequence logo based on an input file */
 function generateGraphic(e) {
-  var file = e.target.files[0];                     // Pull in file
+  $('.char-column').remove();                     // Remove previous images
+  var file = e.target.files[0];                   // Pull in file
   if (file) {
     var r = new FileReader();
     r.onload = function(e) {
@@ -24,10 +27,10 @@ function generateGraphic(e) {
       var lines = parseInputData(content);      // Parse file data
       if (lines.length < 1) {
         alert("The provided file does not contain valid sequence data" +
-        "for visualization. Please try another file.");
+        " for visualization. Please try another file.");
       }
       var ratios = calcCharPercentages(lines);  // Calculate percentages
-      drawChart(ratios);      // Draw figure
+      drawChart(ratios);                        // Draw figure
       }
       r.readAsText(file);
     }
@@ -54,9 +57,9 @@ function generateGraphic(e) {
     var numReads = data.length;
 
     var finalArr = [];                              // Initialize final array
-    for (j = 0; j < numChars; j++) {                // One array per spot
+    for (j = 0; j < numChars; j++) {              // One array per spot
       finalArr.push([0]);
-      for (k = 0; k < 7; k++) {                     // One letter per index
+      for (k = 0; k < 9; k++) {                     // One letter per index
         finalArr[j].push(0);
       }
     }
@@ -86,7 +89,7 @@ function generateGraphic(e) {
           case char_Y:
             finalArr[j][6]++;
             break;
-          case case_space:
+          case char_space:
             finalArr[j][7]++;
             break;
           default:
@@ -94,60 +97,45 @@ function generateGraphic(e) {
         }
       }
     }
+    var notZeroIndex = 0;
+    var rowSum = 0.0;
     for (i = 0; i < numChars; i++) {             // Calculate ratios
-      for (j = 0; j < 8; j++) {
-        finalArr[i][j] = finalArr[i][j] / numChars;
+      notZeroIndex = 0;
+      rowSum = 0;
+      for (j = 0; j < 9; j++) {
+        finalArr[i][j] = (finalArr[i][j] / numReads) * 20;
+        if (finalArr[i][j] > 0) notZeroIndex = j;
+        rowSum += finalArr[i][j];
       }
+      var diff = 20 - rowSum;                    // Even out borders
+      finalArr[i][notZeroIndex] += diff;
+    }
+    for (k = 0; k < numChars; k++) {
+      finalArr[k][9] = k+1;
     }
     return finalArr;
   }
 
 /* ACGRTUY-* */
   function drawChart(charRatios) {
-    var charLookup = ["A", "C", "G", "R", "T", "U", "Y", "-", "*"];
-    var colorLookup = ["green", "blue", "red", "purple", "orange", "cyan", "yellow", "black", "black"];
     d3.select("#sequenceGraphic")
     .selectAll("div")
     .data(charRatios)
       .enter()
       .append("div")
+      .style("height", "163px")
+      .attr("class", "char-column")
       .style("margin", "0px")
       .style("float", "left")
+      .style("border-style", "solid")
+      .style("border-width", "1px")
       .selectAll("p")
-      .data( function(d,i,j) { return d; } )
+      .data(function(d,i,j) { return d; } )
       .enter()
       .append("p")
       .style("color", function(d,i) { return colorLookup[i]; })
-      .style("font-size", function(d){ if (d > 0) { return d * 30 + "vh"; } else {return "0"; }})
+      .style("font-size", function(d,i) { if ((i+1) == charRatios[0].length) { return "20"; } else if (d > 0) { return d + "vh"; } else {return "0"; }})
       .style("margin", "0px")
       .style("padding", "0px")
-      .text(function(d,i) { return charLookup[i]; });
+      .text(function(d,i) { if (i+1 == charRatios[0].length) { return d; } else { return charLookup[i]; }});
   }
-
-
-  /*function drawColumn(singleCharRatios) {
-    var charLookup = ["A", "C", "G", "R", "T", "U", "Y", "-", "*"];
-    var colorLookup = ["green", "blue", "red", "purple", "orange", "cyan", "yellow", "black", "black"];
-    d3.select("#sequenceGraphic")
-    .selectAll("div")
-    .data(singleCharRatios)
-      .enter()
-      //.append("p") //removing
-      //.selectAll("p") // these
-      //.data( function(d,i,j) { return d; } ) //lines
-      //.enter() //text displays normally
-      .append("p")
-      .style("color", function(d,i) { return colorLookup[i]; })
-      .style("font-size", function(d){ if (d > 0) { return d * 30 + "vh"; } else {return "0"; }})
-      .style("margin", "0px")
-      .text(function(d,i) { return charLookup[i]; });
-}*/
-
-/* TEST CASES:
-  - blank files, all file types, files with improper format
-  - odd, even, zero number of sequences
-  - sequences with differing sequence lengths
-  - upper and lower case sequences
-  - positions with 0, all, and in between values
-  - test different browswers
-*/
