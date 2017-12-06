@@ -1,4 +1,4 @@
-// Sequence Chart - SJG 01Dec2017
+// Sequence Chart - SJG 05Dec2017
 
 const char_A = "A";       // Adenine
 const char_C = "C";       // Cytosine
@@ -57,14 +57,14 @@ function generateGraphic(e) {
     var numReads = data.length;
 
     var finalArr = [];                              // Initialize final array
-    for (j = 0; j < numChars; j++) {              // One array per spot
+    for (j = 0; j < numChars; j++) {                // One array per spot
       finalArr.push([0]);
       for (k = 0; k < 9; k++) {                     // One letter per index
         finalArr[j].push(0);
       }
     }
 
-    for (i = 0; i < numReads; i++) {             // Tally counts
+    for (i = 0; i < numReads; i++) {                // Tally counts
       var currSeq = data[i];
       for (j = 0; j < numChars; j++) {
         switch(currSeq.charAt(j).toUpperCase()) {
@@ -110,13 +110,13 @@ function generateGraphic(e) {
       var diff = 20 - rowSum;                    // Even out borders
       finalArr[i][notZeroIndex] += diff;
     }
-    for (k = 0; k < numChars; k++) {
+    for (k = 0; k < numChars; k++) {              // Add index labels for display
       finalArr[k][9] = k+1;
     }
     return finalArr;
   }
 
-/* ACGRTUY-* */
+  /* Draws graphic */
   function drawChart(charRatios) {
     d3.select("#sequenceGraphic")
     .selectAll("div")
