@@ -31,7 +31,7 @@ function generateGraphic(e) {
       }
       var ratios = calcCharPercentages(lines);  // Calculate percentages
       drawChart(ratios);                        // Draw figure
-      evenOutLines();
+      evenOut();
       }
       r.readAsText(file);
     }
@@ -108,10 +108,10 @@ function generateGraphic(e) {
         if (finalArr[i][j] > 0) notZeroIndex = j;
         rowSum += finalArr[i][j];
       }
-      var diff = 20 - rowSum;                    // Even out borders
+      var diff = 20 - rowSum;                    // Smooth
       finalArr[i][notZeroIndex] += diff;
     }
-    for (k = 0; k < numChars; k++) {              // Add index labels for display
+    for (k = 0; k < numChars; k++) {             // Add index labels for display
       finalArr[k][9] = k+1;
     }
     return finalArr;
@@ -135,21 +135,21 @@ function generateGraphic(e) {
       .data(function(d,i,j) { return d; } )
       .enter()
       .append("p")
-      .style("color", function(d,i) { return colorLookup[i]; })
-      .style("font-size", function(d,i) { if ((i+1) == charRatios[0].length) { return "20"; } else if (d > 0) { return d + "vh"; } else {return "0"; }})
+      .attr("class", function(d,i) { if ((i+1) == charRatios[0].length) { return "index-label"; } else {return ""; }})
+      .style("font-size", function(d,i) { if ((i+1) == charRatios[0].length) { return "14"; } else if (d > 0) { return d + "vh"; } else {return "0"; }})
       .style("position", function(d,i) { if ((i+1) == charRatios[0].length) { return "absolute"; } else { return ""; }})
       .style("bottom", function(d,i) { if ((i+1) == charRatios[0].length) { return "1"; } else { return ""; }})
       .style("right", function(d,i) { if ((i+1) == charRatios[0].length) { return "1"; } else { return ""; }})
       .style("height", function(d,i) { if ((i+1) == charRatios[0].length) { return "10%"; } else { return ""; }})
+      .style("width", function(d,i) { if ((i+1) == charRatios[0].length) { return "100%"; } else { return ""; }})
       .style("margin", "0px")
       .style("padding", "0px")
+      .style("color", function(d,i) { return colorLookup[i]; })
       .text(function(d,i) { if (i+1 == charRatios[0].length) { return d; } else { return charLookup[i]; }});
   }
 
-  function evenOutLines() {
-
-
-
+  /* Adjusts columns to even out bottom borders */
+  function evenOut() {
     var maxHeight = 0;
     $(".char-column").each(function() {
       var currHeight = $(this).height();
