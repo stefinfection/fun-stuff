@@ -31,6 +31,7 @@ function generateGraphic(e) {
       }
       var ratios = calcCharPercentages(lines);  // Calculate percentages
       drawChart(ratios);                        // Draw figure
+      evenOutLines();
       }
       r.readAsText(file);
     }
@@ -123,19 +124,38 @@ function generateGraphic(e) {
     .data(charRatios)
       .enter()
       .append("div")
-      .style("height", "163px")
       .attr("class", "char-column")
       .style("margin", "0px")
       .style("float", "left")
       .style("border-style", "solid")
       .style("border-width", "1px")
+      .style("position", "relative")
+      .style("height", "30%")
       .selectAll("p")
       .data(function(d,i,j) { return d; } )
       .enter()
       .append("p")
       .style("color", function(d,i) { return colorLookup[i]; })
       .style("font-size", function(d,i) { if ((i+1) == charRatios[0].length) { return "20"; } else if (d > 0) { return d + "vh"; } else {return "0"; }})
+      .style("position", function(d,i) { if ((i+1) == charRatios[0].length) { return "absolute"; } else { return ""; }})
+      .style("bottom", function(d,i) { if ((i+1) == charRatios[0].length) { return "1"; } else { return ""; }})
+      .style("right", function(d,i) { if ((i+1) == charRatios[0].length) { return "1"; } else { return ""; }})
+      .style("height", function(d,i) { if ((i+1) == charRatios[0].length) { return "10%"; } else { return ""; }})
       .style("margin", "0px")
       .style("padding", "0px")
       .text(function(d,i) { if (i+1 == charRatios[0].length) { return d; } else { return charLookup[i]; }});
+  }
+
+  function evenOutLines() {
+
+
+
+    var maxHeight = 0;
+    $(".char-column").each(function() {
+      var currHeight = $(this).height();
+      if (currHeight > maxHeight) maxHeight = currHeight;
+    });
+    $(".char-column").each(function() {
+      $(this).height(maxHeight);
+    });
   }
